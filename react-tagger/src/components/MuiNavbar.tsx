@@ -21,22 +21,11 @@ export const MuiNavbar = ({links}:MuiNavbarProps) => {
           TAGGERAPP
         </Typography>
         <Stack direction="row" spacing={2}>
-
           {links.map((link)=>{
             return <Button color="inherit" component={Link} to={link.url}>
             {link.name}
           </Button>
           })}
-          
-          {/* <Button color="inherit" component={Link} to="/about">
-            About
-          </Button>
-          <Button color="inherit" component={Link} to="/">
-            Home
-          </Button>
-          <Button color="inherit" component={Link} to="/login">
-            Login/Register
-          </Button> */}
         </Stack>
       </Toolbar>
     </AppBar>
