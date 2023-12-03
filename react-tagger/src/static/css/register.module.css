@@ -1,0 +1,159 @@
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)}
+  to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+  from {transform: scale(0)}
+  to {transform: scale(1)}
+}
+
+
+.LoginPage_SigninButton,.RegisterPage_SignupButton {
+  background-color: #d3d3d3;
+  font-family: 'Montserrat', sans-serif;
+  color: rgb(255, 0, 0);
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+
+.RegisterPage_Screen {
+  
+  position: relative;
+  height: 610px;
+  width: 450px;
+  margin: auto;
+  padding: 60px 60px;
+  background: url(https://picsum.photos/id/1004/5616/3744) no-repeat   center center #505050;   
+  background-size: cover;
+  background-image: url('../pictures/login_page_background.jpg');
+  box-shadow: 0px 30px 60px -5px #000;
+}
+
+
+.RegisterPage_Form{
+  padding-top: 20px;
+}
+
+.RegisterPage_Birthdate{
+  color: gray;
+}
+
+.active {
+  border-bottom: 2px solid #1161ed;
+   /* background-color: #d3d3d3; */
+}
+
+.nonactive {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+
+
+.LoginRegister_Span,.span{
+  text-transform: uppercase;
+  font-size: 12px;
+  opacity: 0.4; 
+  display: inline-block;
+  position: relative;
+  top: -55px;
+  transition: all 0.5s ease-in-out;
+}
+
+
+.text,.LoginPage_text,.RegisterPage_text {
+  border: none;
+  width: 100%;
+  padding: 10px 20px;
+  display: block;
+  height: 30px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0);
+  overflow: hidden;
+  margin-top: 15px;
+  transition: all 0.5s ease-in-out;
+}
+
+.text:focus,.LoginPage_text:focus,.RegisterPage_text:focus {
+  outline: 0;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0);
+}
+
+.text:focus + .span,.LoginPage_text:focus + .span,.RegisterPage_text:focus + .span {
+  opacity: 0.6;
+}
+
+
+.LoginPage_SigninButton,.RegisterPage_SignupButton {
+  background-color: #1161ed;
+  color: #FFF;
+  width: 100%;
+  padding: 10px 20px;
+  display: block;
+  height: 39px;
+  border-radius: 20px;
+  margin-top: 30px;
+  transition: all 0.5s ease-in-out;
+  border: none;
+  text-transform: uppercase;
+}
+
+/* change signup button location */
+.RegisterPage_SignupButton{
+  margin-top: 50px;
+}
+
+
+.LoginPage_SigninButton:hover,.RegisterPage_SignupButton:hover {
+  background: #4082f5;
+  box-shadow: 0px 4px 35px -5px #4082f5;
+  cursor: pointer;
+}
+
+.LoginPage_SigninButton:focus,.RegisterPage_SignupButton:focus {
+  outline: none;
+}
+
+.text_span{
+  /* background-color: #d3d3d3; */
+  font-family: 'Montserrat', sans-serif;
+  color: #fff;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.h2{
+  padding-left: 12px;
+  font-size: 22px;
+  text-transform: uppercase;
+  padding-bottom: 5px;
+  letter-spacing: 2px;
+  display: inline-block;
+  font-weight: 100;
+}
+
+.h2:first-child{
+  padding-left: 0px;
+}
+
+input[type="text"],
+input[type="password"] {
+font-family: 'Montserrat', sans-serif;
+color: #fff;
+}
+
+input {
+display: inline-block;
+padding-top: 20px;
+font-size: 14px;
+}
+
+.h2,
+.LoginRegister_Span,
+.LoginPage_RememberMeCheckbox {
+margin-left: 10px;
+}
