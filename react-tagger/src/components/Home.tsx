@@ -2,7 +2,21 @@ import React from 'react'
 import { MuiNavbar } from './MuiNavbar'
 
 export const Home = () => {
+  const links = [
+    {
+      name:'About',
+      url:'/about'
+    },
+    {
+      name:'Home',
+      url:'/'
+    },
+    {
+      name:'Login/Register',
+      url:'/login'
+    },   
+  ]
   return (
-    <MuiNavbar/>
+    <MuiNavbar links={links}/>
   )
 }

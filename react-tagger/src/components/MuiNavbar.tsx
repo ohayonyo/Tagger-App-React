@@ -3,7 +3,14 @@ import { AppBar, Toolbar, IconButton, Typography, Stack, Button } from '@mui/mat
 import ImageIcon from '@mui/icons-material/Image';
 import { Link } from 'react-router-dom';
 
-export const MuiNavbar = () => {
+type MuiNavbarProps = {
+  links:{
+    name:string
+    url:string
+  }[]
+}
+
+export const MuiNavbar = ({links}:MuiNavbarProps) => {
   return (
     <AppBar position="static">
       <Toolbar>
@@ -14,8 +21,14 @@ export const MuiNavbar = () => {
           TAGGERAPP
         </Typography>
         <Stack direction="row" spacing={2}>
+
+          {links.map((link)=>{
+            return <Button color="inherit" component={Link} to={link.url}>
+            {link.name}
+          </Button>
+          })}
           
-          <Button color="inherit" component={Link} to="/about">
+          {/* <Button color="inherit" component={Link} to="/about">
             About
           </Button>
           <Button color="inherit" component={Link} to="/">
@@ -23,7 +36,7 @@ export const MuiNavbar = () => {
           </Button>
           <Button color="inherit" component={Link} to="/login">
             Login/Register
-          </Button>
+          </Button> */}
         </Stack>
       </Toolbar>
     </AppBar>
