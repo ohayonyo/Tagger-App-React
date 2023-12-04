@@ -16,6 +16,8 @@ const Login = () => {
 
   const handleLogin = () => {
     console.log('Logging in...');
+    const url = 'http://localhost:3000/'+username+'/home';
+    window.location.href = url;
   };
 
   return (
@@ -26,7 +28,7 @@ const Login = () => {
             sign in
           </h2>
           <h2 className={`${styles.nonactive} ${styles.h2}`}>
-            <a href="/register" className={styles.link}>
+            <a href="/register" style={{ textDecoration: 'none', color: '#1161ed' }}>
               sign up
             </a>
           </h2>
@@ -66,7 +68,7 @@ const Login = () => {
           </button>
           <div className={styles.dont_have_an_account}>
             <p style={{ color: 'white' }}>
-              Don't have an account? <a href="/register" className={styles.link}>sign up</a>
+              Don't have an account? <a href="/register" style={{ textDecoration: 'none', color: '#1161ed' }}>sign up</a>
             </p>
           </div>
         </div>
