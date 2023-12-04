@@ -37,7 +37,6 @@ const UploadImage: React.FC<UploadImageProps> = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const [startPoint, setStartPoint] = useState<{ x: number; y: number } | null>(null);
-  const [endPoint, setEndPoint] = useState<{ x: number; y: number } | null>(null);
   const [rectangles, setRectangles] = useState<{ startX: number; startY: number; endX?: number; endY?: number }[]>([]);
 
 
@@ -51,29 +50,28 @@ const UploadImage: React.FC<UploadImageProps> = () => {
         image.src = URL.createObjectURL(selectedFile);
   
         image.onload = () => {
-          // Set canvas dimensions to match the fixed size
           canvas.width = 1000;
           canvas.height = 600;
-  
-          // Draw the image on the canvas with the fixed size
           ctx.drawImage(image, 0, 0, 1000, 600);
-  
-          // Draw a red rectangle between the two clicked points
-          if (startPoint && endPoint) {
-            ctx.strokeStyle = "red";
-            ctx.lineWidth = 2;
+          ctx.strokeStyle = "red";
+          ctx.lineWidth = 2;
 
-            ctx.strokeRect(
-              Math.min(startPoint.x, endPoint.x),
-              Math.min(startPoint.y, endPoint.y), 
-              Math.abs(startPoint.x - endPoint.x),
-              Math.abs(startPoint.y - endPoint.y)
-            );
-          }
+          rectangles.map((rectangle) => {
+            if(rectangle.endX && rectangle.endY){
+              ctx.strokeRect(
+                Math.min(rectangle.startX, rectangle.endX),
+                Math.min(rectangle.startY, rectangle.endY), 
+                Math.abs(rectangle.startX - rectangle.endX),
+                Math.abs(rectangle.startY - rectangle.endY)
+              );
+            }
+            
+          })
+
         };
       }
     }
-  }, [selectedFile, startPoint, endPoint]);
+  }, [selectedFile, rectangles]);
 
 
   const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
@@ -86,22 +84,18 @@ const UploadImage: React.FC<UploadImageProps> = () => {
 
       if (!startPoint) {
         setStartPoint({ x, y });
-      } else if (!endPoint) {
-        setEndPoint({ x, y });
-      } else {
-        // Save the completed rectangle to the rectangles state
-        setRectangles([...rectangles, { startX: startPoint.x, startY: startPoint.y, endX: endPoint.x, endY: endPoint.y }]);
-        // Reset start and end points for the next rectangle
+      }else{
+        setRectangles([...rectangles, { startX: startPoint.x, startY: startPoint.y, endX: x, endY: y }]);
         setStartPoint(null);
-        setEndPoint(null);
-      }
+        console.log('rectangles:',rectangles)
+      } 
     }
   };
 
-  const resetPoints = () => {
+  const resetRectangles = () => {
     setStartPoint(null);
-    setEndPoint(null);
-  };
+    setRectangles([]);
+  }
 
   const handleUploadClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -131,7 +125,7 @@ const UploadImage: React.FC<UploadImageProps> = () => {
             className={classes.uploadButton}
             component="span"
             color="primary"
-            style={{ width: "100px", height: "100px" }} // Set your desired width and height
+            style={{ width: "100px", height: "100px" }} 
           >
             <AddPhotoAlternateIcon style={{ fontSize: "3rem" }} /> 
           </Fab>
@@ -142,7 +136,7 @@ const UploadImage: React.FC<UploadImageProps> = () => {
 
   const renderUploadedState = () => (
     <div>
-      <button onClick={resetPoints}>reset</button>
+      <button onClick={resetRectangles}>Clear</button>
       <canvas
         ref={canvasRef}
         style={{ border: '3px solid #ccc', width: '1000px', height: '600px', transform: 'scale(0.6)' }}
