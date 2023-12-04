@@ -131,6 +131,8 @@ const UploadImage: React.FC<UploadImageProps> = () => {
       border: "3px solid #ccc",
       width: "1000px", 
       height: "600px", 
+      marginLeft:'10%',
+      marginTop:'-4%',
     }}>
       <div className={`${classes.container} centerWrapper`}>
         <input
@@ -158,7 +160,7 @@ const UploadImage: React.FC<UploadImageProps> = () => {
     <div>
       <div id="uploadForm" style={{ marginTop: 50, marginLeft: 100 }}>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '-10%', position: 'relative' }}>
-          <label htmlFor="tagInput" style={{ marginRight: '4px',marginLeft:'26%' }}>
+          <label htmlFor="tagInput" style={{ marginRight: '4px',marginLeft:'23%' }}>
             Tag name:
           </label>
           <input
@@ -178,8 +180,11 @@ const UploadImage: React.FC<UploadImageProps> = () => {
             <button id="submitButton" style={{ marginRight: 3, marginLeft: 0, height: 24 }}>
               Submit
             </button>
-            <button onClick={resetRectangles} style={{ height: 24 }}>
+            <button onClick={resetRectangles} style={{ height: 24,marginRight: 3}}>
               Clear
+            </button>
+            <button onClick={()=>{setMainState("initial")}} style={{ height: 24 }}>
+              Change Image
             </button>
           </div>
         </div>
