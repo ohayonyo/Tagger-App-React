@@ -7,6 +7,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import { UserHomePage } from './components/UserHomePage';
 import UploadImage from './components/UploadImage';
+import { MyTags } from './components/MyTags';
 // import ImageUpload from './components/ImageUpload';
 
 
@@ -19,6 +20,7 @@ function App() {
       <Route path='register' element={<Register />} />
       <Route path=':username/home' element={<UserHomePage />} />
       <Route path=':username/upload_image' element={<UploadImage />} />
+      <Route path=':username/my_tags' element={<MyTags />} />
     </Routes>
   );
 }
