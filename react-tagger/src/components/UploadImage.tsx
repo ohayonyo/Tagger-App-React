@@ -158,7 +158,7 @@ const UploadImage: React.FC<UploadImageProps> = () => {
 
   const renderUploadedState = () => (
     <div>
-      <div id="uploadForm" style={{ marginTop: 50, marginLeft: 100 }}>
+      <div id="uploadForm" style={{ marginTop: 120, marginLeft: 100 }}>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '-10%', position: 'relative' }}>
           <label htmlFor="tagInput" style={{ marginRight: '4px',marginLeft:'23%' }}>
             Tag name:
@@ -202,6 +202,10 @@ const UploadImage: React.FC<UploadImageProps> = () => {
     <>
       <UserHomePage></UserHomePage>
       <div>
+        <div style={{textAlign:'center',marginBottom:-100}}>
+          <h1>Upload Image</h1>
+        </div>
+        
         <div>
           {mainState === "initial" && renderInitialState()}
           {mainState === "uploaded" && renderUploadedState()}
