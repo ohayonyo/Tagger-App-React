@@ -28,6 +28,14 @@ const useStyles = makeStyles({
   },
 });
 
+type RectanglesType = { 
+  startX: number,
+  startY: number, 
+  endX?: number,
+  endY?: number,
+  tag:string,
+}[]
+
 interface UploadImageProps {}
 
 const UploadImage: React.FC<UploadImageProps> = () => {
@@ -37,8 +45,9 @@ const UploadImage: React.FC<UploadImageProps> = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const [startPoint, setStartPoint] = useState<{ x: number; y: number } | null>(null);
-  const [rectangles, setRectangles] = useState<{ startX: number; startY: number; endX?: number; endY?: number }[]>([]);
+  const [rectangles, setRectangles] = useState<RectanglesType>([]);
 
+  const [tagName, setTagName] = useState<string>("");
 
   useEffect(() => {
     if (selectedFile && canvasRef.current) {
@@ -56,6 +65,8 @@ const UploadImage: React.FC<UploadImageProps> = () => {
           ctx.strokeStyle = "red";
           ctx.lineWidth = 2;
 
+          console.log('myRectangles:',rectangles)
+
           rectangles.map((rectangle) => {
             if(rectangle.endX && rectangle.endY){
               ctx.strokeRect(
@@ -64,6 +75,12 @@ const UploadImage: React.FC<UploadImageProps> = () => {
                 Math.abs(rectangle.startX - rectangle.endX),
                 Math.abs(rectangle.startY - rectangle.endY)
               );
+
+              ctx.font = '30px Arial';
+              ctx.fillStyle = 'red';
+              let xBoxText = rectangle.startX < rectangle.endX ? rectangle.startX + 30 : rectangle.endX + 30;
+              let yBoxText = rectangle.startY < rectangle.endY ? rectangle.startY + 30 : rectangle.endY + 30;
+              ctx.fillText(rectangle.tag, xBoxText, yBoxText);
             }
             
           })
@@ -73,6 +90,9 @@ const UploadImage: React.FC<UploadImageProps> = () => {
     }
   }, [selectedFile, rectangles]);
 
+  const handleTagInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTagName(event.target.value);
+  };
 
   const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
@@ -85,9 +105,8 @@ const UploadImage: React.FC<UploadImageProps> = () => {
       if (!startPoint) {
         setStartPoint({ x, y });
       }else{
-        setRectangles([...rectangles, { startX: startPoint.x, startY: startPoint.y, endX: x, endY: y }]);
+        setRectangles([...rectangles, { startX: startPoint.x, startY: startPoint.y, endX: x, endY: y ,tag:tagName}]);
         setStartPoint(null);
-        console.log('rectangles:',rectangles)
       } 
     }
   };
@@ -95,6 +114,7 @@ const UploadImage: React.FC<UploadImageProps> = () => {
   const resetRectangles = () => {
     setStartPoint(null);
     setRectangles([]);
+    setTagName('');
   }
 
   const handleUploadClick = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,12 +156,40 @@ const UploadImage: React.FC<UploadImageProps> = () => {
 
   const renderUploadedState = () => (
     <div>
-      <button onClick={resetRectangles}>Clear</button>
-      <canvas
-        ref={canvasRef}
-        style={{ border: '3px solid #ccc', width: '1000px', height: '600px', transform: 'scale(0.6)' }}
-        onClick={handleCanvasClick}
-      />
+      <div id="uploadForm" style={{ marginTop: 50, marginLeft: 100 }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '-10%', position: 'relative' }}>
+          <label htmlFor="tagInput" style={{ marginRight: '4px',marginLeft:'26%' }}>
+            Tag name:
+          </label>
+          <input
+            type="text"
+            name="tag_name"
+            id="tagInput"
+            value={tagName}
+            onChange={handleTagInputChange}
+            style={{
+              color: 'black',
+              height: '20px',
+              lineHeight: '20px',
+              padding: '0 5px',
+            }}
+          />
+          <div style={{ marginLeft: '5px' }}>
+            <button id="submitButton" style={{ marginRight: 3, marginLeft: 0, height: 24 }}>
+              Submit
+            </button>
+            <button onClick={resetRectangles} style={{ height: 24 }}>
+              Clear
+            </button>
+          </div>
+        </div>
+  
+        <canvas
+          ref={canvasRef}
+          style={{ border: '3px solid #ccc', width: '1000px', height: '600px', transform: 'scale(0.6)' }}
+          onClick={handleCanvasClick}
+        />
+      </div>
     </div>
   );
 

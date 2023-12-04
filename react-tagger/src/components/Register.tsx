@@ -14,7 +14,6 @@ const Register: React.FC = () => {
   };
 
   const handleRegister = () => {
-    console.log('Registering...');
     const url = 'http://localhost:3000/login';
     window.location.href = url;
   };

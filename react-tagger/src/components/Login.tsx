@@ -15,7 +15,6 @@ const Login = () => {
   };
 
   const handleLogin = () => {
-    console.log('Logging in...');
     const url = 'http://localhost:3000/'+username+'/home';
     window.location.href = url;
   };
