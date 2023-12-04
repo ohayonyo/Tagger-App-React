@@ -13,11 +13,11 @@ export const UserHomePage = () => {
   const prefixUrl = 'http://localhost:3000/'+username;
 
   console.log('prefixUrl',prefixUrl)
-  
+
   const links = [
     {
       name:'Home',
-      url:url,
+      url:prefixUrl+'/home',
     },
     {
       name:'About',
