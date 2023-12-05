@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../static/css/login.module.css'; // Import your CSS module
+import axios from 'axios';
 
 
 const Login = () => {
@@ -14,8 +15,22 @@ const Login = () => {
     setPassword(e.target.value);
   };
 
+  const loginUser = async (username:string, password:string) => {
+    try {
+      const response = await axios.post('http://localhost:5000/users/login', {
+        username: username,
+        password: password,
+      });
+  
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error registering user:', error);
+    }
+  };
+
   const handleLogin = () => {
     const url = 'http://localhost:3000/'+username+'/home';
+    loginUser(username,password);
     window.location.href = url;
   };
 

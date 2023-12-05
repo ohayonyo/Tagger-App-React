@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent } from 'react';
 import styles from '../static/css/register.module.css'; // Import your CSS module
+import axios from 'axios';
 
 const Register: React.FC = () => {
   const [username, setUsername] = useState<string>('');
@@ -13,8 +14,22 @@ const Register: React.FC = () => {
     setPassword(e.target.value);
   };
 
+  const registerUser = async (username:string, password:string) => {
+    try {
+      const response = await axios.post('http://localhost:5000/users/register', {
+        username: username,
+        password: password,
+      });
+  
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error registering user:', error);
+    }
+  };
+  
   const handleRegister = () => {
     const url = 'http://localhost:3000/login';
+    registerUser(username,password);
     window.location.href = url;
   };
 
