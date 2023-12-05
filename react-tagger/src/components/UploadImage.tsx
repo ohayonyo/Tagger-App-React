@@ -3,6 +3,7 @@ import Fab from "@material-ui/core/Fab";
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
 import { makeStyles } from "@material-ui/core/styles";
 import { UserHomePage } from "./UserHomePage";
+import { Button,TextField } from "@mui/material";
 
 const useStyles = makeStyles({
   container: {
@@ -160,32 +161,56 @@ const UploadImage: React.FC<UploadImageProps> = () => {
     <div>
       <div id="uploadForm" style={{ marginTop: 120, marginLeft: 100 }}>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '-10%', position: 'relative' }}>
-          <label htmlFor="tagInput" style={{ marginRight: '4px',marginLeft:'23%' }}>
+          <label htmlFor="tagInput" style={{ marginRight: '4px',marginLeft:'18.5%' }}>
             Tag name:
           </label>
-          <input
-            type="text"
-            name="tag_name"
+          <TextField 
             id="tagInput"
+            variant="outlined"
             value={tagName}
             onChange={handleTagInputChange}
+            inputProps={{
+              style: {
+                color: 'black',
+                height: '30px',
+                lineHeight: '30px',
+                padding: '0 5px',
+                width:170,
+              },
+            }}
             style={{
-              color: 'black',
               height: '20px',
               lineHeight: '20px',
               padding: '0 5px',
             }}
           />
+
           <div style={{ marginLeft: '5px' }}>
-            <button id="submitButton" style={{ marginRight: 3, marginLeft: 0, height: 24 }}>
-              Submit
-            </button>
-            <button onClick={resetRectangles} style={{ height: 24,marginRight: 3}}>
-              Clear
-            </button>
-            <button onClick={()=>{setMainState("initial")}} style={{ height: 24 }}>
-              Change Image
-            </button>
+          <Button variant="contained" style={{ marginRight: 3, marginLeft: 0, height: 30,top:5 }}>
+            Submit
+          </Button>
+
+          <Button variant="contained" 
+          style={{
+             marginRight: 3, 
+             marginLeft: 0, 
+             height: 30 ,
+             top:5
+          }}
+          onClick={resetRectangles}
+          >
+            Clear
+          </Button>
+          
+          <Button variant="contained" 
+          style={{
+            height: 30,
+            top:5
+          }}
+          onClick={()=>{setMainState("initial")}}
+          >
+          Change Image
+          </Button>
           </div>
         </div>
   
