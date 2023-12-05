@@ -128,7 +128,7 @@ const UploadImage: React.FC<UploadImageProps> = () => {
   function getCookie(name: string): string | undefined {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
-    
+
     if (parts.length === 2) {
         return parts.pop()?.split(';').shift()?.trim();
     }
@@ -153,7 +153,7 @@ const UploadImage: React.FC<UploadImageProps> = () => {
       const csrfToken = getCookie('csrftoken');
 
       try {
-        const response = await axios.post('http://127.0.0.1:5000/save_image_tagger/', formData, {
+        const response = await axios.post('http://127.0.0.1:5000/users/save_image_tagger/', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'X-CSRFToken': csrfToken,

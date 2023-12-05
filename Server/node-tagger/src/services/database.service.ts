@@ -100,11 +100,17 @@ export class DatabaseService {
     }
   }
 
-  async saveImage(username: string, image: Buffer): Promise<number | null> {
+  async saveImage(username: string, imageBuffer: Buffer): Promise<number | null> {
     try {
       const stmt = this.db.prepare("INSERT INTO images_tb (username, image) VALUES (?, ?)");
-      stmt.run(username, image);
-
+      stmt.run(username, imageBuffer, (err) => {
+        if (err) {
+          console.error('Error saving image:', err.message);
+        } else {
+          console.log('Image saved successfully.');
+        }
+      });
+  
       // Fetch lastID directly from the database connection
       const lastID: number = await new Promise<number>((resolve, reject) => {
         this.db.get('SELECT last_insert_rowid() as lastID', (err, row: { lastID: number }) => {
@@ -115,7 +121,7 @@ export class DatabaseService {
           }
         });
       });
-
+  
       return lastID;
     } catch (err) {
       console.error('Error saving image:', err.message);
