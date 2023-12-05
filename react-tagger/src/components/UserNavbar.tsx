@@ -1,7 +1,7 @@
 
 import { MuiNavbar } from './MuiNavbar'
 
-export const UserHomePage = () => {
+export const UserNavbar = () => {
   const url = window.location.href;
   const urlPatrs = url.split('/');
   const username = urlPatrs[3];

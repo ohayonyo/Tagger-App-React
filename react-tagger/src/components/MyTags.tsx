@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import ImageList from './ImageList';
-import { UserHomePage } from './UserHomePage';
+import { UserNavbar } from './UserNavbar';
 
 export const MyTags = () => {
   const [images, setImages] = useState<string[]>([
@@ -23,7 +23,7 @@ export const MyTags = () => {
 
   return (
     <>
-      <UserHomePage />
+      <UserNavbar />
       <div style={{ marginTop: '0px',textAlign: 'center',overflow:'hidden' }}>
         <h1>My Tags</h1>
         {images && images.length > 0 ? (

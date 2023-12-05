@@ -2,7 +2,7 @@ import React, { useState,useEffect,useRef } from "react";
 import Fab from "@material-ui/core/Fab";
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
 import { makeStyles } from "@material-ui/core/styles";
-import { UserHomePage } from "./UserHomePage";
+import { UserNavbar } from "./UserNavbar";
 import { Button,TextField } from "@mui/material";
 
 const useStyles = makeStyles({
@@ -225,7 +225,7 @@ const UploadImage: React.FC<UploadImageProps> = () => {
 
   return (
     <>
-      <UserHomePage></UserHomePage>
+      <UserNavbar/>
       <div>
         <div style={{textAlign:'center',marginBottom:-100}}>
           <h1>Upload Image</h1>
