@@ -14,8 +14,11 @@ interface Coordinates {
 }
 
 interface TagWithCoordinates {
+  startX:number;
+  startY:number;
+  endX:number;
+  endY:number;
   tag: string;
-  coordinates: Coordinates;
 }
 
 export class DatabaseService {
@@ -131,13 +134,12 @@ export class DatabaseService {
 
   async saveImageTag(tagWithCoordinates: TagWithCoordinates, image_index_row_db: number, list_element_id: number) {
     try {
-      const { tag, coordinates } = tagWithCoordinates;
-      const { x1, y1, x2, y2 } = coordinates;
+      const {startX, startY, endX, endY,tag} = tagWithCoordinates;
 
       this.db.run(`
         INSERT INTO image_tags_tb (image_index, list_element_id, tag_name, x1_coordinate, y1_coordinate, x2_coordinate, y2_coordinate)
         VALUES (?, ?, ?, ?, ?, ?, ?)
-      `, image_index_row_db, list_element_id, tag, x1, y1, x2, y2);
+      `, image_index_row_db, list_element_id, tag, startX, startY, endX, endY);
     } catch (err) {
       console.error('Error saving image tag:', err.message);
     }

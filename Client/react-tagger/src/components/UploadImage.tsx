@@ -161,6 +161,9 @@ const UploadImage: React.FC<UploadImageProps> = () => {
         });
   
         console.log('Data saved:', response.data);
+        resetRectangles();
+        setMainState("initial");
+
       } catch (error) {
         console.error('Error:', error);
       }

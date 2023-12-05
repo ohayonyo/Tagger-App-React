@@ -34,19 +34,19 @@ async saveUserImageTags(
     if (image) {
       console.log('Image received:', image);
       const image_index_row_db = await this.databaseService.saveImage(username, image.buffer);
-
+      const tagsValues = JSON.parse(tags);
+      let elementIndex = 1;
+      for (const tag of tagsValues) {
+        await this.databaseService.saveImageTag(tag,image_index_row_db,elementIndex);
+        elementIndex++;
+      }
+      return { success: true, message: 'Image tags saved successfully.' };
     } else {
       console.log('No image received.');
     }
 
-    const tagsValues = JSON.parse(tags);
+    return { success: false, message: 'No image selected' };
 
-    // Your logic to save user image tags in the database
-    // const result = await this.databaseService.saveUserImageTags(username, tagsValues, image);
-
-    // Return an appropriate response
-    return { success: true, message: 'Parameters received successfully.' };
-    // return { success: result, message: 'Parameters received successfully.' };
   } catch (error) {
     console.error('Error processing request:', error.message);
     return { success: false, message: 'An error occurred.' };
