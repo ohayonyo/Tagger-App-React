@@ -4,6 +4,7 @@ import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
 import { makeStyles } from "@material-ui/core/styles";
 import { UserNavbar } from "./UserNavbar";
 import { Button,TextField } from "@mui/material";
+import axios from 'axios';
 
 const useStyles = makeStyles({
   container: {
@@ -49,6 +50,7 @@ const UploadImage: React.FC<UploadImageProps> = () => {
   const [rectangles, setRectangles] = useState<RectanglesType>([]);
   const [tagName, setTagName] = useState<string>("");
 
+  
   useEffect(() => {
     if (selectedFile && canvasRef.current) {
       const canvas = canvasRef.current;
@@ -64,8 +66,6 @@ const UploadImage: React.FC<UploadImageProps> = () => {
           ctx.drawImage(image, 0, 0, 1000, 600);
           ctx.strokeStyle = "red";
           ctx.lineWidth = 2;
-
-          console.log('myRectangles:',rectangles)
 
           rectangles.map((rectangle) => {
             if(rectangle.endX && rectangle.endY){
@@ -125,6 +125,51 @@ const UploadImage: React.FC<UploadImageProps> = () => {
     }
   };
 
+  function getCookie(name: string): string | undefined {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    
+    if (parts.length === 2) {
+        return parts.pop()?.split(';').shift()?.trim();
+    }
+    return undefined;
+}
+
+
+  const handleSubmitButton = async () => {
+
+    if (selectedFile) {
+      const formData = new FormData();
+      const blob = new Blob([selectedFile], { type: selectedFile.type }); 
+
+      const currentUrl = window.location.href;
+      const urlParts = currentUrl.split('/');
+      const username = urlParts[3];
+
+      formData.append('image', blob);
+      formData.append('username', username);
+      formData.append('tags', JSON.stringify(rectangles));
+
+      const csrfToken = getCookie('csrftoken');
+
+      try {
+        const response = await axios.post('http://127.0.0.1:5000/save_image_tagger/', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'X-CSRFToken': csrfToken,
+          },
+        });
+  
+        console.log('Data saved:', response.data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+
+      console.log('formData:',formData);
+    } 
+    
+  }
+
   const renderInitialState = () => (
     <div style={{
       transform: 'scale(0.6)',
@@ -138,11 +183,11 @@ const UploadImage: React.FC<UploadImageProps> = () => {
         <input
           accept="image/*"
           style={{ display: "none" }}
-          id="contained-button-file"
+          id="selectedImage"
           type="file"
           onChange={handleUploadClick}
         />
-        <label htmlFor="contained-button-file">
+        <label htmlFor="selectedImage">
           <Fab
             className={classes.uploadButton}
             component="span"
@@ -185,7 +230,15 @@ const UploadImage: React.FC<UploadImageProps> = () => {
           />
 
           <div style={{ marginLeft: '5px' }}>
-          <Button variant="contained" style={{ marginRight: 3, marginLeft: 0, height: 30,top:5 }}>
+          <Button variant="contained" 
+          style={{ 
+            marginRight: 3,
+            marginLeft: 0,
+            height: 30,
+            top:5 
+          }}
+          onClick={()=>{handleSubmitButton()}}
+          >
             Submit
           </Button>
 
