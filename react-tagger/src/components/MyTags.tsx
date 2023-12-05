@@ -24,10 +24,10 @@ export const MyTags = () => {
   return (
     <>
       <UserHomePage />
-      <div style={{ marginTop: '0px',textAlign: 'center' }}>
+      <div style={{ marginTop: '0px',textAlign: 'center',overflow:'hidden' }}>
         <h1>My Tags</h1>
         {images && images.length > 0 ? (
-          <div style={{ transform: 'scale(0.8)',marginTop:-90 }}>
+          <div style={{ transform: 'scale(0.8)',marginTop:-60 }}>
             <ImageList images={images} onDelete={handleDelete} />
           </div>
         ) : (
