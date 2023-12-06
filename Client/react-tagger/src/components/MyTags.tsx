@@ -1,19 +1,39 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ImageList from './ImageList';
 import { UserNavbar } from './UserNavbar';
 
+interface ImageData {
+  image_index: number;
+  image: string; 
+}
+
 export const MyTags = () => {
-  const [images, setImages] = useState<string[]>([
-    'https://www.w3schools.com/images/w3schools_green.jpg',
-    'https://www.copahost.com/blog/wp-content/uploads/2019/07/imgsize2.png',
-    'https://www.copahost.com/blog/wp-content/uploads/2019/07/imgsize2.png',
-    'https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg',
-  ]);
+  const [images, setImages] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  const url = window.location.href;
+  const urlParts = url.split('/');
+  const username = urlParts[3]; 
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/users/${username}/images`);
+        const data: { success: boolean; data?: ImageData[]; message?: string } = await response.json();
+        if (data.success) {
+          setImages(data.data?.map(image => `data:image/png;base64, ${image.image}`) || []);
+        } else {
+          setError(data.message || 'An error occurred.');
+        }
+      } catch (error) {
+        setError('An error occurred while fetching images.');
+      }
+    };
+
+    fetchImages();
+  }, [username]);
+
+
 
   const handleDelete = (index: number) => {
     const newImages = [...images];
@@ -24,16 +44,18 @@ export const MyTags = () => {
   return (
     <>
       <UserNavbar />
-      <div style={{ marginTop: '0px',textAlign: 'center',overflow:'hidden' }}>
+      <div style={{ marginTop: '0px', textAlign: 'center', overflow: 'hidden' }}>
         <h1>My Tags</h1>
-        {images && images.length > 0 ? (
-          <div style={{ transform: 'scale(0.8)',marginTop:-60 }}>
+        {error ? (
+          <p>Error: {error}</p>
+        ) : images && images.length > 0 ? (
+          <div style={{ transform: 'scale(0.8)', marginTop: -60 }}>
             <ImageList images={images} onDelete={handleDelete} />
           </div>
         ) : (
           <p>No existing tags</p>
         )}
-      </div>   
+      </div>
     </>
   );
 };

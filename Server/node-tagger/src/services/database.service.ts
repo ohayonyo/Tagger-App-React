@@ -1,10 +1,17 @@
 import sqlite3 = require('sqlite3');
 
-// interface User {
-//   id: number;
-//   username: string;
-//   password: string;
-// }
+import * as base64 from 'base64-js';
+
+export interface ImageData {
+  image_index: number;
+  image: string; // Assuming this is a base64-encoded string
+}
+
+interface ImageRow {
+  image_index: number;
+  image: Buffer;
+}
+
 
 interface Coordinates {
   x1: number;
@@ -169,7 +176,6 @@ export class DatabaseService {
         INSERT INTO users_tb (username, password) VALUES (?, ?)
       `);
   
-      // Use await here
       await stmt.run(username, password);
   
       return true;
@@ -200,7 +206,35 @@ export class DatabaseService {
     }
   }
 
-  // 
+  async getImagesOfUser(username: string): Promise<ImageData[] | null> {
+    try {
+      const imageRows: ImageRow[] = await new Promise((resolve, reject) => {
+        this.db.all(
+          'SELECT image_index, image FROM images_tb WHERE username=?',
+          [username],
+          (err, rows: ImageRow[]) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+
+      const image_data: ImageData[] = imageRows.map(row => {
+        return {
+          image_index: row.image_index,
+          image: base64.fromByteArray(row.image),
+        };
+      });
+  
+      return image_data;
+    } catch (error) {
+      console.error(`Database error: ${error.message}`);
+      return null; 
+    }
+  }
 
   closeConnection() {
     this.db.close();

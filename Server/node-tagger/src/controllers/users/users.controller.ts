@@ -1,11 +1,23 @@
-import { Controller, Post, Body, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Post, Get, Param, Body, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { MulterFile } from 'multer';
 import { DatabaseService } from '../../services/database.service';
+import { ImageData } from '../../services/database.service';
+
+export interface ImageResponse {
+  success: boolean;
+  data?: ImageData[]; // ImageData is the structure you defined before
+  message?: string;
+}
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly databaseService: DatabaseService) {}
+
+  onModuleDestroy() {
+    // Close the database connection when the NestJS module is destroyed
+    this.databaseService.closeConnection();
+  }
 
   @Post('register')
   async registerUser(@Body() body: { username: string; password: string }): Promise<boolean> {
@@ -52,5 +64,25 @@ async saveUserImageTags(
     return { success: false, message: 'An error occurred.' };
   }
 }
+
+@Get(':username/images')
+  async getImagesOfUser(@Param('username') username: string): Promise<ImageResponse> {
+    try {
+      console.log('in get images of user:',username);
+      const imageRows = await this.databaseService.getImagesOfUser(username);
+
+      const image_data = imageRows.map(row => {
+        return {
+          image_index: row.image_index,
+          image: row.image,
+        };
+      });
+
+      return { success: true, data: image_data };
+    } catch (error) {
+      console.error('Error processing request:', error.message);
+      return { success: false, message: 'An error occurred.' };
+    }
+  }
 
 }
