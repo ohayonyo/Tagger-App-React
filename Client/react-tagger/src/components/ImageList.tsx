@@ -18,8 +18,6 @@ interface ImageListProps {
 
 const ImageList: React.FC<ImageListProps> = ({ images, onDelete, imagesTags }) => {
 
-  console.log('imageTags in function:')
-
   return (
     <div className={styles['list-container']}>
       <Grid container spacing={2}>
@@ -41,7 +39,7 @@ const ImageList: React.FC<ImageListProps> = ({ images, onDelete, imagesTags }) =
                       boxSizing: 'border-box',
                       pointerEvents: 'none',
                       color:'red',
-                      fontSize:24,
+                      fontSize:20,
                       fontWeight:'bold',
                     }}
                   >

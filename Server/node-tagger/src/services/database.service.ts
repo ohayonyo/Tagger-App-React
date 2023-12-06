@@ -243,7 +243,7 @@ export class DatabaseService {
   convertTagsFormat(imageTagsData:TagWithCoordinates[],imageIndex:number):any{
     console.log('in convert tags:');
     const tags = imageTagsData.map((tagWithCoordinates)=>{
-      const top = Math.max(tagWithCoordinates.startY,tagWithCoordinates.endY) * HEIGHT_RATIO;
+      const top = Math.min(tagWithCoordinates.startY,tagWithCoordinates.endY) * HEIGHT_RATIO;
       const left = Math.min(tagWithCoordinates.startX,tagWithCoordinates.endX) * WIDTH_RATIO;
       const width = Math.abs(tagWithCoordinates.endX-tagWithCoordinates.startX) * WIDTH_RATIO;
       const height = Math.abs(tagWithCoordinates.endY - tagWithCoordinates.startY) * HEIGHT_RATIO;
@@ -256,13 +256,10 @@ export class DatabaseService {
       }
     }) || [];
 
-    const res = {image_index:imageIndex,tags:tags}
-    console.log('res=',res);
-    return res;
+    return {image_index:imageIndex,tags:tags}
   }
 
   async getImageTags(imageIndex: number): Promise<any[]> {
-    console.log('hello')
     try {
       const imageTagsRows = await new Promise<any[]>((resolve, reject) => {
         this.db.all(
@@ -279,11 +276,11 @@ export class DatabaseService {
       });
 
       const imageTagsData:TagWithCoordinates[] = imageTagsRows.map((row) => ({
-        startX:row.x1_coordinate,
-        startY:row.y1_coordinate,
-        endX:row.x2_coordinate,
-        endY:row.y2_coordinate,
-        tag:row.tag_name
+        startX:Number(row.x1_coordinate),
+        startY:Number(row.y1_coordinate),
+        endX:Number(row.x2_coordinate),
+        endY:Number(row.y2_coordinate),
+        tag:String(row.tag_name),
       }));
 
       return this.convertTagsFormat(imageTagsData,imageIndex);

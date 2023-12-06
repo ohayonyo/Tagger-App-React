@@ -49,19 +49,15 @@ export const MyTags = () => {
   const username = urlParts[3]; 
 
   const fetchAllTags = async (imageDataArray: ImageData[]) => {
-    console.log('in fetch all tags')
     const allImageTags: ImageTags[] = [];
-    console.log('imageDataArray',imageDataArray)
     for (const imageData of imageDataArray) {
       try {
         const tagsResponse = await fetchImageTags(imageData.image_index);
-        console.log('tagResponse:',tagsResponse)
         if (tagsResponse) {
           const imageTags: ImageTags = {
             image_index: Number(tagsResponse.image_index),
             tags: tagsResponse.tags || [],
           };
-          console.log('imageTags=',imageTags)
           allImageTags.push(imageTags);
         } else {
           console.error('Error fetching tags for image index', imageData.image_index);
@@ -70,7 +66,6 @@ export const MyTags = () => {
         console.error('An error occurred while fetching tags for image index', imageData.image_index, error);
       }
     }
-    console.log('all image tags:',allImageTags);
     setImageTags(allImageTags);
   };
 
@@ -117,8 +112,8 @@ export const MyTags = () => {
   const myImageTags:ImageTags[] = [
     {image_index:1,
       tags:[
-        {top:100,left:50,width:100,height:200,tag:'hello'},
-        {top:200,left:50,width:300,height:200,tag:'my'},
+        {top:323,left:227,width:95,height:44,tag:'ID'},
+        // {top:200,left:50,width:300,height:200,tag:'my'},
       ]
     },
     {
