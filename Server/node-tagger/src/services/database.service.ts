@@ -176,6 +176,7 @@ export class DatabaseService {
         INSERT INTO users_tb (username, password) VALUES (?, ?)
       `);
   
+      // Use await here
       await stmt.run(username, password);
   
       return true;

@@ -22,6 +22,10 @@ export class UsersController {
   @Post('register')
   async registerUser(@Body() body: { username: string; password: string }): Promise<boolean> {
     const { username, password } = body;
+    // const isUserNameExists = await this.databaseService.isUsernameExists(username);
+    // console.log('isUsernameExists:',isUserNameExists);
+    // if(isUserNameExists)
+    //   return false;
     return await this.databaseService.saveNewUser(username,password);
   }
 
