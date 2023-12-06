@@ -200,6 +200,8 @@ export class DatabaseService {
     }
   }
 
+  // 
+
   closeConnection() {
     this.db.close();
   }
