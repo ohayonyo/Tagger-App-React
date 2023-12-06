@@ -22,42 +22,85 @@ interface ImageData {
   image: string; 
 }
 
+const fetchImageTags = async (imageIndex:number) => {
+  try {
+    const response = await fetch(`http://localhost:5000/users/${imageIndex}/image_tags`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch image tags');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching image tags:', error);
+    return { success: false, message: 'An error occurred.' };
+  }
+};
+
+
+
 export const MyTags = () => {
   const [images, setImages] = useState<string[]>([]);
   const [imagesWithIndexes, setImagesWithIndexes] = useState<ImageData[]>([]);
   const [error, setError] = useState<string | null>(null);
 
+  const [ImageTags,setImageTags] = useState<ImageTags[]>([]);
+
   const url = window.location.href;
   const urlParts = url.split('/');
   const username = urlParts[3]; 
 
-  useEffect(() => {
-    const fetchImages = async () => {
+  const fetchAllTags = async (imageDataArray: ImageData[]) => {
+    console.log('in fetch all tags')
+    const allImageTags: ImageTags[] = [];
+    console.log('imageDataArray',imageDataArray)
+    for (const imageData of imageDataArray) {
       try {
-        const response = await fetch(`http://localhost:5000/users/${username}/images`);
-        const data: { success: boolean; data?: ImageData[]; message?: string } = await response.json();
-        if (data.success) {
-          setImages(data.data?.map(image => `data:image/png;base64, ${image.image}`) || []);
-
-          const modifiedImageDataArray: ImageData[] = data.data?.map((item) => ({
-            ...item,
-            image: `data:image/png;base64, ${item.image}`,
-          })) || [];
-
-          setImagesWithIndexes(modifiedImageDataArray);
-          
-          console.log('modified:',modifiedImageDataArray);
-
+        const tagsResponse = await fetchImageTags(imageData.image_index);
+        console.log('tagResponse:',tagsResponse)
+        if (tagsResponse) {
+          const imageTags: ImageTags = {
+            image_index: Number(tagsResponse.image_index),
+            tags: tagsResponse.tags || [],
+          };
+          console.log('imageTags=',imageTags)
+          allImageTags.push(imageTags);
         } else {
-          setError(data.message || 'An error occurred.');
+          console.error('Error fetching tags for image index', imageData.image_index);
         }
       } catch (error) {
-        setError('An error occurred while fetching images.');
+        console.error('An error occurred while fetching tags for image index', imageData.image_index, error);
       }
-    };
+    }
+    console.log('all image tags:',allImageTags);
+    setImageTags(allImageTags);
+  };
 
-    fetchImages();
-  }, [username]);
+  useEffect(() => {
+  const fetchImages = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/users/${username}/images`);
+      const data: { success: boolean; data?: ImageData[]; message?: string } = await response.json();
+      if (data.success) {
+        setImages(data.data?.map(image => `data:image/png;base64, ${image.image}`) || []);
+
+        const modifiedImageDataArray: ImageData[] = data.data?.map((item) => ({
+          ...item,
+          image: `data:image/png;base64, ${item.image}`,
+        })) || [];
+
+        setImagesWithIndexes(modifiedImageDataArray);
+        // Call fetchAllTags after setting imagesWithIndexes
+        fetchAllTags(modifiedImageDataArray);
+
+      } else {
+        setError(data.message || 'An error occurred.');
+      }
+    } catch (error) {
+      setError('An error occurred while fetching images.');
+    }
+  };
+
+  fetchImages();
+}, [username]);
 
 
 
@@ -106,7 +149,7 @@ export const MyTags = () => {
           <p>Error: {error}</p>
         ) : images && images.length > 0 ? (
           <div style={{ transform: 'scale(0.8)', marginTop: -60 }}>
-            <ImageList images={imagesWithIndexes} onDelete={handleDelete} imagesTags={myImageTags} />
+            <ImageList images={imagesWithIndexes} onDelete={handleDelete} imagesTags={ImageTags} />
           </div>
         ) : (
           <p>No existing tags</p>

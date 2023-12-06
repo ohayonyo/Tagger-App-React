@@ -15,8 +15,10 @@ interface ImageListProps {
   imagesTags: ImageTags[];
 }
 
+
 const ImageList: React.FC<ImageListProps> = ({ images, onDelete, imagesTags }) => {
-  console.log('my images:', images);
+
+  console.log('imageTags in function:')
 
   return (
     <div className={styles['list-container']}>
@@ -31,10 +33,10 @@ const ImageList: React.FC<ImageListProps> = ({ images, onDelete, imagesTags }) =
                     key={tagIndex}
                     style={{
                       position: 'absolute',
-                      top: tag.top, // Adjust the percentage as needed
-                      left: tag.left, // Adjust the percentage as needed
-                      width: tag.width, // Adjust the percentage as needed
-                      height: tag.height, // Adjust the percentage as needed
+                      top: tag.top, 
+                      left: tag.left, 
+                      width: tag.width, 
+                      height: tag.height,
                       border: '2px solid red',
                       boxSizing: 'border-box',
                       pointerEvents: 'none',

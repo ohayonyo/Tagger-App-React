@@ -89,4 +89,21 @@ async saveUserImageTags(
     }
   }
 
+  @Get(':image_index/image_tags')
+  async getImagesTags(@Param('image_index') image_index: number): Promise<any> {
+    try {
+      console.log('in get images tags');
+      const imageTags = await this.databaseService.getImageTags(image_index);
+
+      return imageTags
+    } catch (error) {
+      // console.error('Error processing request:', error.message);
+      // return { success: false, message: 'An error occurred.' };
+      return null;
+    }
+  }
+
+  
+
+
 }
