@@ -262,7 +262,7 @@ const UploadImage: React.FC<UploadImageProps> = () => {
             height: 30,
             top:5
           }}
-          onClick={()=>{setMainState("initial")}}
+          onClick={()=>{setMainState("initial"); resetRectangles();}}
           >
           Change Image
           </Button>
