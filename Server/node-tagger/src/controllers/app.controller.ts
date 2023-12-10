@@ -1,17 +1,13 @@
-import { Controller, Get ,Post,Body,UseInterceptors,UploadedFile} from '@nestjs/common';
+import { Controller, Get ,Post,Body,UseInterceptors,UploadedFile,Param} from '@nestjs/common';
 import { AppService } from '../services/app.service';
 import { User } from 'src/entities/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { MulterFile } from 'multer';
+import { ImageDataType } from '../services/app.service';
 
 @Controller('users')
 export class AppController {
   constructor(private readonly appService: AppService) {}
-
-  // @Get()
-  // getHello(): Promise<User> {
-  //   return this.appService.createUser("yoad","123");
-  // }
 
   @Post('register')
   async registerUser(@Body() body: { username: string; password: string }): Promise<User> {
@@ -37,6 +33,12 @@ export class AppController {
   ): Promise<any> {
     return this.appService.saveUserImageTags(username,image,tags);
 
+  }
+
+  @Get(':username/images')
+  async getImagesOfUser(@Param('username') username: string): Promise<{success:boolean; data:ImageDataType[]|null}> {
+    const image_data = await this.appService.getImagesOfUser(username);
+    return { success: true, data: image_data };
   }
 
 }

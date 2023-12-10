@@ -6,6 +6,8 @@ import { MulterFile } from 'multer';
 import { Image } from 'src/entities/image.entity';
 import { ImageTag } from 'src/entities/imageTag.entity';
 
+import * as base64 from 'base64-js';
+
 type TagWithCoordinates = {
   startX:number;
   startY:number;
@@ -20,6 +22,11 @@ type RectanglesTags = {
   width:number;
   height:number;
   tag:string;
+}
+
+export type ImageDataType = {
+  image_index: number;
+  image: string; // Assuming this is a base64-encoded string
 }
 
 const WIDTH_RATIO = 0.355;
@@ -125,6 +132,19 @@ export class AppService {
     await this.imageTagsRepository.save(imageTags);
 
     return { success: true, message: 'Image tags saved successfully.' };
+}
+
+async getImagesOfUser(username:string) : Promise<ImageDataType[] | null>{
+  const user = await this.getUserByUsername(username);
+  if(!user)
+    return null;
+
+  return user.my_images.map((img) => {
+   return {
+    image_index: img.image_index,
+    image: base64.fromByteArray(img.image),
+  }
+  })
 }
 
 
