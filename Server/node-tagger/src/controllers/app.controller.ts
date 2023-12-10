@@ -23,7 +23,7 @@ export class AppController {
   }
 
   @Post('login')
-  async loginUser(@Body() body: { username: string; password: string }): Promise<{success:boolean,value:string}> {
+  async loginUser(@Body() body: { username: string; password: string }): Promise<{success:boolean,message:string}> {
     const { username, password } = body;
     return await this.appService.login(username, password);
   }
