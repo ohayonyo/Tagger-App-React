@@ -10,7 +10,7 @@ export interface ImageResponse {
   message?: string;
 }
 
-@Controller('users')
+@Controller('temp')
 export class UsersController {
   constructor(private readonly databaseService: DatabaseService) {}
 

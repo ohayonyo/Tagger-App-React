@@ -12,6 +12,7 @@ export class User {
   @Column({ default: false })
   is_active: boolean;
 
-  @OneToMany(() => Image, (image) => image.user, { cascade: true }) // Added cascade option for cascading operations
+  @OneToMany(() => Image, (image) => image.user, { cascade: true, eager: true }) // Added eager loading for immediate loading
   my_images: Image[];
+
 }

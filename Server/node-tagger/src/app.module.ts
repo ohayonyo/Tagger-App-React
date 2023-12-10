@@ -5,10 +5,13 @@ import { UsersController } from './controllers/users/users.controller';
 import { DatabaseModule } from './modules/database.module';
 import { DatabaseService } from './services/database.service';  // Import the service directly, not the module
 import { TypeOrmModule } from '@nestjs/typeorm';
+import {Repository} from 'typeorm'
+import { User } from './entities/user.entity';
+
 import config from 'ormconfig';
 
 @Module({
-  imports: [DatabaseModule,TypeOrmModule.forRoot(config)],
+  imports: [DatabaseModule, TypeOrmModule.forRoot(config), TypeOrmModule.forFeature([User, Repository])], // Use TypeOrmModule.forFeature to include repositories
   controllers: [AppController, UsersController],
   providers: [AppService, DatabaseService],
 })
