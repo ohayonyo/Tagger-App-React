@@ -9,9 +9,11 @@ import {Repository} from 'typeorm'
 import { User } from './entities/user.entity';
 
 import config from 'ormconfig';
+import { Image } from './entities/image.entity';
+import { ImageTag } from './entities/imageTag.entity';
 
 @Module({
-  imports: [DatabaseModule, TypeOrmModule.forRoot(config), TypeOrmModule.forFeature([User, Repository])], // Use TypeOrmModule.forFeature to include repositories
+  imports: [DatabaseModule, TypeOrmModule.forRoot(config), TypeOrmModule.forFeature([User,Image,ImageTag,Repository])], // Use TypeOrmModule.forFeature to include repositories
   controllers: [AppController, UsersController],
   providers: [AppService, DatabaseService],
 })
