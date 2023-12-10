@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn, OneToMany } from "typeorm";
+import { Image } from "./image.entity";
 
 @Entity()
 export class User {
@@ -8,6 +9,9 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
+  @Column({ default: false })
   is_active: boolean;
+
+  @OneToMany(() => Image, (image) => image.user, { cascade: true }) // Added cascade option for cascading operations
+  my_images: Image[];
 }
