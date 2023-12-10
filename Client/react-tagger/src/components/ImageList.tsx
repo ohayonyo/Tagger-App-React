@@ -39,8 +39,8 @@ const ImageList: React.FC<ImageListProps> = ({ images, onDelete, imagesTags }) =
                       boxSizing: 'border-box',
                       pointerEvents: 'none',
                       color:'red',
-                      fontSize:20,
-                      fontWeight:'bold',
+                      fontSize:21,
+                      fontWeight:700,
                     }}
                   >
                     {tag.tag}
