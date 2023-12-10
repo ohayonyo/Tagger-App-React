@@ -16,7 +16,7 @@ type TagWithCoordinates = {
   tag: string;
 }
 
-type RectanglesTags = {
+export type RectanglesTags = {
   top:number;
   left:number;
   width:number;
@@ -81,19 +81,19 @@ export class AppService {
   }
 
 
-  convertTagsFormat(imageTagsData:TagWithCoordinates[],imageIndex:number):{image_index:number;tags:RectanglesTags[]}{
+  convertTagsFormat(imageTagsData:ImageTag[],imageIndex:number):{image_index:number;tags:RectanglesTags[]}{
     console.log('in convert tags:');
     const tags = imageTagsData.map((tagWithCoordinates)=>{
-      const top = Math.min(tagWithCoordinates.startY,tagWithCoordinates.endY) * HEIGHT_RATIO;
-      const left = Math.min(tagWithCoordinates.startX,tagWithCoordinates.endX) * WIDTH_RATIO;
-      const width = Math.abs(tagWithCoordinates.endX-tagWithCoordinates.startX) * WIDTH_RATIO;
-      const height = Math.abs(tagWithCoordinates.endY - tagWithCoordinates.startY) * HEIGHT_RATIO;
+      const top = Math.min(tagWithCoordinates.y1_coordinate,tagWithCoordinates.y2_coordinate) * HEIGHT_RATIO;
+      const left = Math.min(tagWithCoordinates.x1_coordinate,tagWithCoordinates.x2_coordinate) * WIDTH_RATIO;
+      const width = Math.abs(tagWithCoordinates.x2_coordinate-tagWithCoordinates.x1_coordinate) * WIDTH_RATIO;
+      const height = Math.abs(tagWithCoordinates.y2_coordinate - tagWithCoordinates.y1_coordinate) * HEIGHT_RATIO;
       return {
         top:top,
         left:left,
         width:width,
         height:height,
-        tag:tagWithCoordinates.tag
+        tag:tagWithCoordinates.tag_name
       }
     }) || [];
 
@@ -101,7 +101,7 @@ export class AppService {
   }
 
 
-  async saveUserImageTags(username: string, image: MulterFile, tags: string) {
+  async saveUserImageTags(username: string, image: MulterFile, tags: string) : Promise<{success:boolean,message:string}> {
     const user = await this.getUserByUsername(username);
 
     if (!image || !image.buffer)
@@ -147,6 +147,17 @@ async getImagesOfUser(username:string) : Promise<ImageDataType[] | null>{
   })
 }
 
+async getImageTags(image_index:number):Promise<{image_index:number;tags:RectanglesTags[]}>{
+  const image = await this.imagesRepository.findOne({
+    where:{image_index:image_index},
+  });
+
+  const imageTags = await this.imageTagsRepository.find({
+    where:{image:image}
+  })
+
+  return this.convertTagsFormat(imageTags,image_index);
+}
 
   getHello(): string {
     return 'Hello World!';
