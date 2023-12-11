@@ -6,6 +6,7 @@ import axios from 'axios';
 const Login = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -21,17 +22,26 @@ const Login = () => {
         username: username,
         password: password,
       });
-  
+      
+      return response;
       console.log(response.data);
     } catch (error) {
       console.error('Error registering user:', error);
     }
+    return null;
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const url = 'http://localhost:3000/'+username+'/home';
-    loginUser(username,password);
-    window.location.href = url;
+    const isLoggedIn = await loginUser(username,password);
+    setPassword('');
+    setUsername('');
+    if(isLoggedIn && isLoggedIn?.data.success){
+      setErrorMessage('');
+      window.location.href = url;
+    }else{
+      setErrorMessage('Wrong username or password');
+    }
   };
 
   return (
@@ -85,6 +95,9 @@ const Login = () => {
               Don't have an account? <a href="/register" style={{ textDecoration: 'none', color: '#1161ed' }}>sign up</a>
             </p>
           </div>
+
+          {errorMessage!=='' && <div style={{color:'red',fontSize:20,fontWeight:'bold',position:'relative',top:10,left:80}}>{errorMessage}</div>}
+
         </div>
       </div>
     </div>
