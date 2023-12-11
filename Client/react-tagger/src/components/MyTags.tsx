@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import ImageList from './ImageList';
 import { UserNavbar } from './UserNavbar';
+import axios from 'axios';
 
 
 export interface Tag{
@@ -99,14 +100,24 @@ export const MyTags = () => {
 
 
 
-  const handleDelete = (index: number) => {
-    const newImages = [...images];
-    newImages.splice(index, 1);
-    setImages(newImages);
+  const handleDelete = async (index: number) => {
+    const image_index = imagesWithIndexes[index].image_index;
+
+    await axios.delete(`http://localhost:5000/users/deleteImage/${image_index}`)
+    .then(response => {
+      
+      const newImages = [...images];
+      newImages.splice(index, 1);
+      setImages(newImages);
+    
+      const newImagesWithIndexes = [...imagesWithIndexes];
+      newImagesWithIndexes.splice(index, 1);
+      setImagesWithIndexes(newImagesWithIndexes);
+    })
+    .catch(error => {
+      console.error('Error deleting image: ', error);
+    });
   
-    const newImagesWithIndexes = [...imagesWithIndexes];
-    newImagesWithIndexes.splice(index, 1);
-    setImagesWithIndexes(newImagesWithIndexes);
   };
 
   const myImageTags:ImageTags[] = [

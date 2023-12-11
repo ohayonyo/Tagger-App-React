@@ -5,6 +5,7 @@ import axios from 'axios';
 const Register: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -15,22 +16,38 @@ const Register: React.FC = () => {
   };
 
   const registerUser = async (username:string, password:string) => {
+
+    if(username.length === 0 || password.length === 0)
+      return false;
+    
     try {
       const response = await axios.post('http://localhost:5000/users/register', {
         username: username,
         password: password,
       });
-  
-      console.log(response.data);
+      console.log('response.data=',response.data);
+      if(response.data)
+      return response.data;      
     } catch (error) {
-      console.error('Error registering user:', error);
+      setErrorMessage((error as Error).toString());
+      return false;
     }
   };
   
-  const handleRegister = () => {
+  const handleRegister = async () => {
     const url = 'http://localhost:3000/login';
-    registerUser(username,password);
-    window.location.href = url;
+    const isRegistered = await registerUser(username,password);
+    setUsername('');
+    setPassword('');
+    if(isRegistered){
+      setErrorMessage('');
+      window.location.href = url;
+    }else{
+      if(username.length === 0 || password.length === 0)
+        setErrorMessage('One or more fields are empty');
+      else
+        setErrorMessage('Username is already taken');
+    }
   };
 
   return (
@@ -73,6 +90,8 @@ const Register: React.FC = () => {
           <button style={{ marginTop: '10px' }} className={styles.RegisterPage_SignupButton} onClick={handleRegister}>
             Sign Up
           </button>
+
+          {errorMessage!=='' && <div style={{color:'red',fontSize:20,fontWeight:'bold',position:'relative',top:30,left:80}}>{errorMessage}</div>}
         </div>
       </div>
     </div>

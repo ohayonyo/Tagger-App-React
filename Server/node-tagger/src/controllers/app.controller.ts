@@ -1,4 +1,4 @@
-import { Controller, Get ,Post,Body,UseInterceptors,UploadedFile,Param} from '@nestjs/common';
+import { Controller, Get ,Post,Body,UseInterceptors,UploadedFile,Param, Delete} from '@nestjs/common';
 import { AppService } from '../services/app.service';
 import { User } from 'src/entities/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
@@ -44,6 +44,11 @@ export class AppController {
   @Get(':image_index/image_tags')
   async getImageTags(@Param('image_index') image_index: number):Promise<{image_index:number;tags:RectanglesTags[]}> {
       return await this.appService.getImageTags(image_index);
+  }
+
+  @Delete('deleteImage/:index')
+  async deleteImage(@Param('index') index: number){
+    return await this.appService.deleteImage(index);
   }
 
 }

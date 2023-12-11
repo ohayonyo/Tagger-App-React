@@ -159,6 +159,10 @@ async getImageTags(image_index:number):Promise<{image_index:number;tags:Rectangl
   return this.convertTagsFormat(imageTags,image_index);
 }
 
+async deleteImage(index:number){
+  await this.imagesRepository.delete({image_index:index});
+}
+
   getHello(): string {
     return 'Hello World!';
   }
